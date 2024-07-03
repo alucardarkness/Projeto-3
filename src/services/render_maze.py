@@ -1,19 +1,17 @@
 from pygame import draw, Rect
-from src.utils.screen import Screen
+import src.globals as gb
+
 white = (255, 255, 255)  
 
-class RenderMaze:
-    def __init__(self, maze:list) -> None:
-        self.maze = maze
-        self.length = len(maze)
-
-    def draw(self, screen: Screen, pos_x: int, pos_y: int):
-        screen.surface.fill(white)  
-        for x in range(self.length):
-            for y in range(self.length):
-                if self.maze[x][y] == '#':
-                    draw.rect(screen.surface, (0, 125, 255), 
-                              Rect(((x * 16 - pos_x) * screen.resolution + screen.width/2), 
-                                   ((y * 16 - pos_y) * screen.resolution + screen.width/2), 
-                                   16 * screen.resolution, 
-                                   16 * screen.resolution))      
+def draw_maze():
+    gb.screen.surface.fill(white)  
+    int_x = int(gb.player.x)
+    int_y = int(gb.player.y)
+    for x in range((int_x - 15) if int_x > 15 else 0, (int_x + 15) if int_x + 15 < gb.maze.length else gb.maze.length):
+        for y in range((int_y - 15) if int_y > 15 else 0, (int_y + 15) if int_y + 15 < gb.maze.length else gb.maze.length):
+            if gb.maze.maze[x][y] == '#':
+                draw.rect(gb.screen.surface, (0, 125, 255), 
+                            Rect(((x - gb.player.x) * 16 * gb.screen.resolution + gb.screen.width/2), 
+                                ((y - gb.player.y) * 16 * gb.screen.resolution + gb.screen.width/2), 
+                                16 * gb.screen.resolution, 
+                                16 * gb.screen.resolution))      
