@@ -2,7 +2,7 @@ from pygame import draw
 import src.globals as gb
 
 class Bomb:
-    def __init__(self, x:float, y:float, fuse_time:int = 1400) -> None:
+    def __init__(self, x:float, y:float, fuse_time:int = 120) -> None:
         self.x = x
         self.y = y
         self.fuse_time = fuse_time
