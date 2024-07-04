@@ -1,16 +1,16 @@
-from src.utils.screen import Screen
 from src.game_entities.bomb import Bomb
-from src.services.random_maze_gen import Maze
 from pygame import draw
 from math import sqrt
 import src.globals as gb
 
 class Player:
-    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.02) -> None:
+    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.1, hp:int = 4, points:int = 0) -> None:
         self.x = x
         self.y = y
         self.speed = speed
         self.item = "bomb"
+        self.hp = hp
+        self.points = points
     
     def update(self):
         if gb.key_dict['Q']: self.use_item()
@@ -22,6 +22,11 @@ class Player:
                 gb.entity_stack.append(Bomb(self.x, self.y))
                 self.item = None
             
+    def hit(self):
+        self.hp -= 1
+        self.x = 1.5
+        self.y = 1.5
+        
     def move(self):
         vector2 = [0, 0]
         if gb.key_dict['D']: vector2[0] += 1

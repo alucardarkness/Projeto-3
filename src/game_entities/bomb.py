@@ -1,10 +1,8 @@
-from src.utils.screen import Screen
-from src.services.random_maze_gen import Maze
 from pygame import draw
 import src.globals as gb
 
 class Bomb:
-    def __init__(self, x:float, y:float, fuse_time:int = 80) -> None:
+    def __init__(self, x:float, y:float, fuse_time:int = 1400) -> None:
         self.x = x
         self.y = y
         self.fuse_time = fuse_time
@@ -18,6 +16,10 @@ class Bomb:
         for i in range(x-1 if x > 1 else x, (x+2) if x+2 < gb.maze.length -1 else x+1):
             for j in range(y-1 if y > 1 else y, y+2 if y+2 < gb.maze.length-1 else y+1):
                 print('Explodiu', i, j)
+                if int(gb.player.x) == i and int(gb.player.y) == j:
+                    gb.player.hp -= 1
+                    gb.player.x = 1.5
+                    gb.player.y = 1.5
                 gb.maze.maze[i][j] = '.'
     
     def draw(self):
