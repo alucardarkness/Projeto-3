@@ -4,13 +4,14 @@ from math import sqrt
 import src.globals as gb
 
 class Player:
-    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.1, hp:int = 4, points:int = 0) -> None:
+    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.1, hp:int = 4, points:int = 0, time:int = 60) -> None:
         self.x = x
         self.y = y
         self.speed = speed
         self.item = "bomb"
         self.hp = hp
         self.points = points
+        self.time = time
     
     def update(self):
         if gb.key_dict['Q']: self.use_item()
@@ -71,7 +72,4 @@ class Player:
 
 
     def draw(self):
-        draw.circle(gb.screen.surface, 
-                    (255, 125, 0), 
-                    (gb.screen.width/2, gb.screen.width/2), 
-                    (5 * gb.screen.resolution))
+        gb.screen.surface.blit(gb.asset['player'], (gb.screen.width/2 - 4 * gb.screen.resolution, gb.screen.width/2 - 4 * gb.screen.resolution))

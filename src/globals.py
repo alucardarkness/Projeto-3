@@ -12,13 +12,26 @@ def init():
     global screen
     global font
     global level
-    global timer
+    global asset
 
     maze = Maze(45)
     player = Player()
-    screen = Screen(resolution=2)
-    entity_stack = [player, Enemy(5.5, 5.5, 'Hello World?')]
+    screen = Screen(resolution=5)
+    entity_stack = [player]
+    maze.get_maze_entities()
     key_dict = {'A':False, 'D':False, 'W':False, 'S':False, 'Q':False}
     font = pygame.font.Font("fonts/font.ttf", 32)
-    timer = 60
     level = 1
+    asset = {
+        "wall": pygame.transform.scale_by(pygame.image.load("assets/textures/wall.png"), screen.resolution),
+        "floor": pygame.transform.scale_by(pygame.image.load("assets/textures/path.png"), screen.resolution),
+        "spawn": pygame.transform.scale_by(pygame.image.load("assets/textures/spawn.png"), screen.resolution),
+        "exit": pygame.transform.scale_by(pygame.image.load("assets/textures/exit.png"), screen.resolution),
+        "heart": pygame.transform.scale_by(pygame.image.load("assets/textures/heart.png"), screen.resolution),
+        "clock": pygame.transform.scale_by(pygame.image.load("assets/textures/clock.png"), screen.resolution),
+        "coin": pygame.transform.scale_by(pygame.image.load("assets/textures/coin.png"), screen.resolution),
+        "bomb": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb.png"), screen.resolution),
+        "enemy": pygame.transform.scale_by(pygame.image.load("assets/textures/enemy.png"), screen.resolution),
+        "player": pygame.transform.scale_by(pygame.image.load("assets/textures/player.png"), screen.resolution),
+        
+    }

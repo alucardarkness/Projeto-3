@@ -1,4 +1,9 @@
-from random import shuffle
+from random import shuffle, randint
+import src.globals as gb
+from src.game_entities.heart import Heart
+from src.game_entities.clock import Clock
+from src.game_entities.coin import Coin
+from src.game_entities.enemy import Enemy
 
 class Maze:
     def __init__(self, size: int = 10):
@@ -31,6 +36,18 @@ class Maze:
                     if x - 2 > 0 and maze[y][x-2] == '#':
                         maze[y][x-1] = '.'
                         self.make_path(maze, x-2, y, l)
+    
+
+    def get_maze_entities(self): 
+        item_list = ["H", "T", "C", "C", "E"] + ['.'] * 20
+        for i in range(1, self.length, 2):
+            for j in range(1, self.length, 2):
+                if self.maze[i][j] == '.':
+                    match item_list[randint(0, len(item_list)-1)]:
+                        case "H": gb.entity_stack.append(Heart(i, j))
+                        case "T": gb.entity_stack.append(Clock(i, j))
+                        case "C": gb.entity_stack.append(Coin(i, j))
+                        case "E": gb.entity_stack.append(Enemy(i, j, "Hello World?"))
 
     def __str__(self) -> str:
         return '\n'.join([''.join(line) for line in self.maze])

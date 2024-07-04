@@ -29,17 +29,17 @@ while True:
             # if any key is pressed  
             if event.type == pygame.KEYDOWN:  
                 # prints on the console the key pressed  
-                print(u'"{}" key pressed'.format(key_name))  
+                #print(u'"{}" key pressed'.format(key_name))  
                 gb.key_dict[key_name] = True
  
             # if any key is released  
             elif event.type == pygame.KEYUP:  
                 # prints on the console the released key  
-                print(u'"{}" key released'.format(key_name))  
+                #print(u'"{}" key released'.format(key_name))  
                 gb.key_dict[key_name] = False
         if event.type == pygame.USEREVENT: 
-            gb.timer -= 1
-            print(gb.timer)
+            gb.player.time -= 1
+            print(gb.player.time)
         if event.type == pygame.QUIT:  
             pygame.quit()  
             # quit the program.   

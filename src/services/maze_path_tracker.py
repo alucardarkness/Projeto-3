@@ -13,7 +13,6 @@ class PathTracker:
         
     def path_tracker(self, x:int, y:int):
         if len(self.path) > 300: 
-            print( '\n'.join([''.join(line) for line in self._maze]))
             return 
         self._maze[x][y] = 'o'
         self.path.append((x,y))

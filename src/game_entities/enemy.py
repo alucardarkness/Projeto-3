@@ -3,7 +3,7 @@ from src.services.maze_path_tracker import PathTracker
 from pygame import draw
 from src.constants import *
 class Enemy():
-    def __init__(self, x:float, y:float, question:str, speed:float=0.1) -> None:
+    def __init__(self, x:float, y:float, question:str, speed:float=0.05) -> None:
         self.x = x
         self.y = y
         self.question = question
@@ -25,10 +25,9 @@ class Enemy():
         self.x += vector2[0] * self.speed
         self.y += vector2[1] * self.speed
         
-        if round(self.x) == round(gb.player.x) and round(self.y) == round(gb.player.y):
+        if abs(gb.player.x - self.x) < 0.5 and abs(gb.player.y - self.y) < 0.5:
             gb.player.hit()
     def draw(self):
-        draw.circle(gb.screen.surface, 
-                    RED, 
-                    (((self.x - gb.player.x) * 16 * gb.screen.resolution + gb.screen.width/2), ((self.y - gb.player.y) * 16 * gb.screen.resolution + gb.screen.width/2)), 
-                    (5 * gb.screen.resolution))
+        gb.screen.surface.blit(gb.asset['enemy'], 
+                                ((((self.x - gb.player.x) * 16 - 4) * gb.screen.resolution + gb.screen.width/2), 
+                                 (((self.y - gb.player.y) * 16 - 4) * gb.screen.resolution + gb.screen.width/2)))

@@ -13,18 +13,14 @@ class Bomb:
             self.explodir(int(self.x), int(self.y))
             
     def explodir(self, x, y):
+        print('Explodiu', x, y)
         for i in range(x-1 if x > 1 else x, (x+2) if x+2 < gb.maze.length -1 else x+1):
             for j in range(y-1 if y > 1 else y, y+2 if y+2 < gb.maze.length-1 else y+1):
-                print('Explodiu', i, j)
-                if int(gb.player.x) == i and int(gb.player.y) == j:
-                    gb.player.hp -= 1
-                    gb.player.x = 1.5
-                    gb.player.y = 1.5
                 gb.maze.maze[i][j] = '.'
-    
+        if abs(gb.player.x - self.x) < 2.5 and abs(gb.player.y - self.y) < 2.5:
+            gb.player.hit()
     def draw(self):
         if self.fuse_time > 0:
-            draw.circle(gb.screen.surface, 
-                        (0, 0, 0), 
-                        (((self.x - gb.player.x) * 16 * gb.screen.resolution + gb.screen.width/2), ((self.y - gb.player.y) * 16 * gb.screen.resolution + gb.screen.width/2)), 
-                        (5 * gb.screen.resolution))
+            gb.screen.surface.blit(gb.asset['bomb'], 
+                                ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
+                                 (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))
