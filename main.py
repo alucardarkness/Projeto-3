@@ -2,7 +2,10 @@ import src.services.render_maze as render_maze
 from src.gui.interface import Interface
 import pygame  
 import src.globals as gb 
-
+import csv
+from src.constants import *
+from datetime import date
+import pickle
 
 pygame.init()  
 gb.init()
@@ -64,6 +67,14 @@ while True:
             case "close": 
                 gb.is_paused = False
                 gb.state = 'hub'
+                # Saving the objects:
+                with open(SAVE_FILE, 'wb') as f:  # Python 3: open(..., 'wb')
+                    pickle.dump([gb.maze, gb.maze_list, gb.player, gb.entity_stack, gb.level, gb.cron], f)
+            case "load_game":
+                # Getting back the objects:
+                with open(SAVE_FILE, 'rb') as f:  # Python 3: open(..., 'rb')
+                    gb.maze, gb.maze_list, gb.player, gb.entity_stack, gb.level, gb.cron = pickle.load(f)
+                    gb.state = 'game'
             case "restart":
                 gb.is_paused = False
                 set_phase()
@@ -77,13 +88,14 @@ while True:
                 gb.level = 1
                 set_phase()
             case "phase_complete":
-                if gb.level < 5:
-                    gb.level += 1
-                    set_phase()
-                else:
-                    gb.state == "gameover"
+                gb.level += 1
+                set_phase()
+
             case "gameover":
                 gb.state = "gameover"
+                with open(SCORE_FILE, 'a', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(['aluno', int(100 *gb.level * gb.player.points / gb.cron)])
         gb.event = None
     match gb.state:
         case "hub":

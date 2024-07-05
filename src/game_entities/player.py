@@ -24,7 +24,10 @@ class Player:
     def update(self):
         if gb.key_dict['Q']: self.use_item()
         if gb.maze.maze[int(self.x)][int(self.y)] == 'S':
-            gb.event = 'phase_complete'
+            if gb.level < 5:
+                gb.event = 'phase_complete'
+            else:
+                gb.event = 'game_over'
         self.move()
         
     def use_item(self):

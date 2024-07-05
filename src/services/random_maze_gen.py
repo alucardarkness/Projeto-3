@@ -18,7 +18,7 @@ class Maze:
         self.length = size * 2 + 1
         self.maze = [['#' for _ in range(self.length)] for _ in range(self.length)]
 
-        with open(f"storage/maze_{level}") as f:
+        with open(f"src/scenes/maps/maze_{level}") as f:
             content = f.read().splitlines()
             if content[0] < str(date.today()): 
                 self.make_path(self.maze, 1, 1, self.length)

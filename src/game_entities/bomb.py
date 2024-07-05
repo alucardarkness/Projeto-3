@@ -25,6 +25,12 @@ class Bomb:
                 entity.hit()
     def draw(self):
         if self.fuse_time > 0:
-            gb.screen.surface.blit(gb.asset['bomb'], 
-                                ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
-                                 (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))
+            if (self.fuse_time//20) % 2 == 0:
+                gb.screen.surface.blit(gb.asset['bomb'], 
+                                    ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
+                                    (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))
+                
+            else:
+                gb.screen.surface.blit(gb.asset['bomb_tick'], 
+                                    ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
+                                    (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))

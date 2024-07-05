@@ -19,3 +19,4 @@ BROWN_RED = Color("brown")
 MAROON = Color("maroon")
 TURQUOISE = Color("turquoise")
 SCORE_FILE = 'storage/score.csv'
+SAVE_FILE = 'storage/saves/save.pkl'

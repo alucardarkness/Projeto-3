@@ -26,7 +26,7 @@ def init():
     global cron
     
     with open(SCORE_FILE) as file:
-        scoreboard = csv.reader(file, delimiter=',')
+        scoreboard = list(csv.reader(file, delimiter=','))[1:]
     maze_list = [Maze(1, 10), Maze(2, 20), Maze(3, 30), Maze(4, 40), Maze(5, 45)]
     is_paused = False
     state = "hub"
@@ -51,6 +51,7 @@ def init():
         "clock": pygame.transform.scale_by(pygame.image.load("assets/textures/clock.png"), screen.resolution),
         "coin": pygame.transform.scale_by(pygame.image.load("assets/textures/coin.png"), screen.resolution),
         "bomb": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb.png"), screen.resolution),
+        "bomb_tick": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb_tick.png"), screen.resolution),
         "enemy": pygame.transform.scale_by(pygame.image.load("assets/textures/enemy.png"), screen.resolution),
         "player": pygame.transform.scale_by(pygame.image.load("assets/textures/player.png"), screen.resolution),
         
@@ -60,6 +61,7 @@ def init():
         "button_hover": pygame.transform.scale_by(pygame.image.load("assets/textures/button_hover.png"), 4),
         "hub": pygame.image.load("assets/textures/hub.png"),
         "back_button": pygame.transform.scale_by(pygame.image.load("assets/textures/back_button.png"), 3),
+        "back_button_hover": pygame.transform.scale_by(pygame.image.load("assets/textures/back_button_hover.png"), 3),
         "trivia_button": pygame.transform.scale_by(pygame.image.load("assets/textures/button.png"), 3)
     }
     
