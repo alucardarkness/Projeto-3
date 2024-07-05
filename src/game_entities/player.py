@@ -4,7 +4,7 @@ from math import sqrt
 import src.globals as gb
 
 class Player:
-    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.05, hp:int = 4, points:int = 0, time:int = 60) -> None:
+    def __init__(self, x:float = 1.5, y:float = 1.5, speed:float = 0.05, hp:int = 4, points:int = 0, time:int = 60, name:str = "Player 1") -> None:
         self.x = x
         self.y = y
         self.speed = speed
@@ -12,7 +12,8 @@ class Player:
         self.hp = hp
         self.points = points
         self.time = time
-        self.last_death = None
+        self.last_death = (int(self.x), int(self.y))
+        self.name = name
 
     def respawn(self, x:float = 1.5, y:float = 1.5, speed:float = 0.05, hp:int = 4, time:int = 60):
         self.x = x
@@ -22,6 +23,7 @@ class Player:
         self.hp = hp
         self.time = time
         self.vector2 = [0, 0] 
+        self.last_death = (int(self.x), int(self.y))
 
     def update(self):
         if gb.key_dict['Q']: self.use_item()
@@ -30,6 +32,7 @@ class Player:
                 gb.event = 'phase_complete'
             else:
                 gb.event = 'game_over'
+        if self.hp > 5: self.hp = 5
         self.move()
         
     def use_item(self):
@@ -43,7 +46,7 @@ class Player:
         self.last_death = (int(self.x), int(self.y))
         self.x = 1.5
         self.y = 1.5
-        if self.hp == 0:
+        if self.hp <= 0:
             gb.event = 'gameover'
         
     def move(self):

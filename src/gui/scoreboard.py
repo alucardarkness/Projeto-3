@@ -1,7 +1,7 @@
 import src.globals as gb
 from src.gui.back_button import BackButton
 from pygame import draw, Rect
-from src.constants import *
+from src.utils.constants import *
 
 class Scoreboard:
     def __init__(self) -> None:

@@ -1,7 +1,7 @@
 import src.globals as gb
 from src.gui.button import Button
 from pygame import draw, Rect
-from src.constants import *
+from src.utils.constants import *
 
 class Hub:
     def __init__(self) -> None:

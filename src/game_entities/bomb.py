@@ -1,4 +1,3 @@
-from pygame import draw
 import src.globals as gb
 
 class Bomb:
@@ -18,13 +17,13 @@ class Bomb:
             gb.entity_stack.remove(self)
             
     def explodir(self, x, y):
-        print('Explodiu', x, y)
         for i in range(x-1 if x > 1 else x, (x+2) if x+2 < gb.maze.length -1 else x+1):
             for j in range(y-1 if y > 1 else y, y+2 if y+2 < gb.maze.length-1 else y+1):
                 if gb.maze.maze[i][j] == '#': gb.maze.maze[i][j] = '.'
         for entity in gb.entity_stack:
             if abs(entity.x - self.x) < 2.5 and abs(entity.y - self.y) < 2.5:
                 entity.hit()
+                
     def draw(self):
         if self.fuse_time > 0:
             if (self.fuse_time//20) % 2 == 0:

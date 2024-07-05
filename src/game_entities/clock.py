@@ -1,6 +1,6 @@
 from pygame import time
 import src.globals as gb
-from src.constants import *
+from src.utils.constants import *
 
 class Clock:
     def __init__(self, x:int, y:int, bonus_time:int=10) -> None:

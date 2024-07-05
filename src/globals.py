@@ -1,29 +1,14 @@
 from src.services.random_maze_gen import Maze
 from src.game_entities.player import Player
-from src.utils.screen import Screen
+from src.screen import Screen
 from src.game_entities.enemy import Enemy
 import pygame
-from src.constants import *
+from src.utils.constants import *
 import csv
+import os
 
 def init():
-    global maze
-    global player
-    global key_dict
-    global entity_stack
-    global screen
-    global font
-    global font16
-    global level
-    global asset
-    global is_paused
-    global state
-    global event
-    global scoreboard
-    global on_trivia
-    global trivia
-    global cron
-    global difficulty
+    global maze, player, key_dict, entity_stack, screen, font, font16, level, asset, is_paused, state, event, scoreboard, on_trivia, trivia, cron, difficulty
     
     difficulty = 1
     level = 0
@@ -31,19 +16,23 @@ def init():
     maze = None
     on_trivia = None
     trivia = None
-    with open(SCORE_FILE) as file:
-        scoreboard = list(csv.reader(file, delimiter=','))[1:]
+    entity_stack = None
     is_paused = False
     state = "hub"
 
-    player = Player()
+    with open(SCORE_FILE) as file:
+        scoreboard = list(csv.reader(file, delimiter=','))[1:]
+
+    player = Player(name=os.getlogin())
     screen = Screen(resolution=4)
-    entity_stack = None
+    
+    
     key_dict = {'A':False, 'D':False, 'W':False, 'S':False, 'Q':False}
     font = pygame.font.Font("fonts/font.ttf", 32)
     font16 = pygame.font.Font("fonts/font.ttf", 16)
     event = None
     asset = {
+        #sprites
         "wall": pygame.transform.scale_by(pygame.image.load("assets/textures/wall.png"), screen.resolution),
         "wall_side": pygame.transform.scale_by(pygame.image.load("assets/textures/wall_side.png"), screen.resolution),
         "wall_top": pygame.transform.scale_by(pygame.image.load("assets/textures/wall_top.png"), screen.resolution),
@@ -58,6 +47,7 @@ def init():
         "bomb_tick": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb_tick.png"), screen.resolution),
         "ally": pygame.transform.scale_by(pygame.image.load("assets/textures/statue.png"), screen.resolution / 4),
 
+        #ui
         "hit_points": pygame.transform.scale_by(pygame.image.load("assets/textures/heart.png"), 4),
         "book": pygame.transform.scale_by(pygame.image.load("assets/textures/book.png"), 3),
         "button": pygame.transform.scale_by(pygame.image.load("assets/textures/button.png"), 4),

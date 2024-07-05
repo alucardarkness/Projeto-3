@@ -1,4 +1,4 @@
-from pygame import surface, display
+from pygame import display
 class Screen:
     def __init__(self, width:int=800, height:int=800, resolution:float=1) -> None:
         self.width = width

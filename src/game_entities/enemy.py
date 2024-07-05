@@ -1,7 +1,7 @@
 import src.globals as gb
 from src.services.maze_path_tracker import PathTracker
 from pygame import time
-from src.constants import *
+from src.utils.constants import *
 from src.services.trivia import Trivia
 
 class Enemy():

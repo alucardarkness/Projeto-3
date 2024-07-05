@@ -1,5 +1,5 @@
 import src.globals as gb
-from src.constants import *
+from src.utils.constants import *
 import pygame
 class TriviaButton:
     def __init__(self, x, y, width:int = 64*3, height:int = 21*3, num:int = 0) -> None:

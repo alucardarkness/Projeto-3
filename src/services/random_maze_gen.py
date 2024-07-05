@@ -8,7 +8,7 @@ from src.game_entities.enemy import Enemy
 from src.game_entities.ally import Ally
 
 from datetime import date
-from src.constants import *
+from src.utils.constants import *
 
 class Maze:
     def __init__(self, level:int, size: int = 10):

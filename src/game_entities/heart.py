@@ -1,6 +1,6 @@
 from pygame import time
 import src.globals as gb
-from src.constants import *
+from src.utils.constants import *
 
 class Heart:
     def __init__(self, x:int, y:int) -> None:

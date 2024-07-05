@@ -1,5 +1,5 @@
 import src.globals as gb
-from src.constants import *
+from src.utils.constants import *
 import pygame
 class BackButton:
     def __init__(self, x, y, width:int = 23 * 3, height:int = 19 * 3, text:str = "Button", event:str = "") -> None:
@@ -21,7 +21,6 @@ class BackButton:
             self.pressed = True
         else:
             if self.pressed == True:
-                print(f"event: {self.event}")
                 gb.event = self.event
                 self.pressed = False
 

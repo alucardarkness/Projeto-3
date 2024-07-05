@@ -1,7 +1,7 @@
 import src.globals as gb
 from src.gui.button import Button
 from pygame import draw, Rect
-from src.constants import *
+from src.utils.constants import *
 from src.gui.game_ui import GameUi
 from src.gui.hub import Hub
 from src.gui.pause import Pause

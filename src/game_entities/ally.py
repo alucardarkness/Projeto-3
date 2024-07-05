@@ -1,6 +1,6 @@
 import src.globals as gb
 from pygame import draw
-from src.constants import *
+from src.utils.constants import *
 from src.services.trivia import Trivia
 from src.game_entities.heart import Heart
 from src.game_entities.clock import Clock

@@ -1,7 +1,7 @@
 import src.globals as gb
 from src.gui.button import Button
 from pygame import draw, Rect
-from src.constants import *
+from src.utils.constants import *
 
 class Trivia:
     def __init__(self, enemy, is_passivel:bool=False) -> None:
@@ -19,6 +19,7 @@ class Trivia:
             case 3: return ["Qual a cor do cavalo branco", "de napoleao?"]
             case 4: return ["Qual o nome do minotauro que", "enfrentou Teseus?"]
             case 5: return ["Qual foi o tema do projeto 2?"]
+            case 6: return ["Qual das séries a seguir possui", "o maior numero de episódios?"]
 
             
     
@@ -27,15 +28,17 @@ class Trivia:
             case 0:
                 return ("True True", "True False", "False True", "False False")
             case 1:
-                return ("antiderivada", "soma infinitesimal", "funcao da area", "aproximacao linear")
+                return ("Antiderivada", "Soma infinitesimal", "Funcao da area", "Aproximacao linear")
             case 2:
-                return ("tupla", "soma lista", "dicionario", "string")
+                return ("Tupla", "Soma lista", "Dicionario", "String")
             case 3:
-                return ("vermelho", "ele nao tinha cavalo", "branco", "preto")
+                return ("Vermelho", "Ele nao tinha cavalo", "Branco", "Preto")
             case 4:
                 return ("Asterios", "Asmodeus", "Asmodeus", "Aaracokra")
             case 5:
-                return ("cheetos", "domino", "recursao", "cores")
+                return ("Cheetos", "Domino", "Recursao", "Cores")
+            case 6:
+                return ("Power rangers", "One piece", "Doctor who", "Vila sesamo")
     def get_correct(self, trivia_id):
         match trivia_id:
             case 0: return 1
@@ -44,6 +47,7 @@ class Trivia:
             case 3: return 3
             case 4: return 1
             case 5: return 2
+            case 6: return 4
     
     def submit(self, answer):
         gb.on_trivia = False

@@ -1,7 +1,6 @@
 import src.globals as gb
 from src.gui.trivia_button import TriviaButton
-from pygame import draw, Rect
-from src.constants import *
+from src.utils.constants import *
 
 class TriviaUi:
     def __init__(self) -> None:
