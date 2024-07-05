@@ -8,7 +8,6 @@ import csv
 
 def init():
     global maze
-    global maze_list
     global player
     global key_dict
     global entity_stack
@@ -24,17 +23,19 @@ def init():
     global on_trivia
     global trivia
     global cron
+    global difficulty
     
-    with open(SCORE_FILE) as file:
-        scoreboard = list(csv.reader(file, delimiter=','))[1:]
-    maze_list = [Maze(1, 10), Maze(2, 20), Maze(3, 30), Maze(4, 40), Maze(5, 45)]
-    is_paused = False
-    state = "hub"
+    difficulty = 1
     level = 0
     cron = 0
     maze = None
     on_trivia = None
     trivia = None
+    with open(SCORE_FILE) as file:
+        scoreboard = list(csv.reader(file, delimiter=','))[1:]
+    is_paused = False
+    state = "hub"
+
     player = Player()
     screen = Screen(resolution=5)
     entity_stack = None
@@ -52,9 +53,10 @@ def init():
         "coin": pygame.transform.scale_by(pygame.image.load("assets/textures/coin.png"), screen.resolution),
         "bomb": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb.png"), screen.resolution),
         "bomb_tick": pygame.transform.scale_by(pygame.image.load("assets/textures/bomb_tick.png"), screen.resolution),
-        "enemy": pygame.transform.scale_by(pygame.image.load("assets/textures/enemy.png"), screen.resolution),
+        "enemy": pygame.transform.scale_by(pygame.image.load("assets/textures/teacher1.png"), screen.resolution),
         "player": pygame.transform.scale_by(pygame.image.load("assets/textures/player.png"), screen.resolution),
-        
+        "ally": pygame.transform.scale_by(pygame.image.load("assets/textures/ally2.png"), screen.resolution),
+
         "hit_points": pygame.transform.scale_by(pygame.image.load("assets/textures/heart.png"), 4),
         "book": pygame.transform.scale_by(pygame.image.load("assets/textures/book.png"), 3),
         "button": pygame.transform.scale_by(pygame.image.load("assets/textures/button.png"), 4),

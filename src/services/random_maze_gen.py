@@ -5,6 +5,8 @@ from src.game_entities.clock import Clock
 from src.game_entities.coin import Coin
 from src.game_entities.stable_bomb import StableBomb
 from src.game_entities.enemy import Enemy
+from src.game_entities.ally import Ally
+
 from datetime import date
 from src.constants import *
 
@@ -15,19 +17,22 @@ class Maze:
         if level > 5: level = 5
         if level < 1: level = 1
         self.level = level
-        self.length = size * 2 + 1
+        self.length = level * 16 + 1
         self.maze = [['#' for _ in range(self.length)] for _ in range(self.length)]
 
         with open(f"src/scenes/maps/maze_{level}") as f:
             content = f.read().splitlines()
+            print(content[0], str(date.today()))
             if content[0] < str(date.today()): 
                 self.make_path(self.maze, 1, 1, self.length)
                 self.place_itens()
                 self.maze[1][1], self.maze[self.length - 2][self.length - 2] = 'E', 'S'
                 with open(f"storage/maze_{level}", 'w') as w:
                     w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in self.maze]))
+                    w.close()
             else:
                 self.maze = [[c for c in line] for line in content[1:]]
+            f.close()
     def make_path(self, maze, x, y, l):
         maze[y][x] = '.'
         ord = [0,1,2,3]
@@ -52,7 +57,7 @@ class Maze:
                         self.make_path(maze, x-2, y, l)
     
     def place_itens(self):
-        item_list = ["H", "T", "C", "B"] + ['M'] * gb.difficulty + ['.'] * 20 * gb.difficulty
+        item_list = ["H", "T", "C", "C", "B", "A"] + ['M'] * gb.difficulty + ['.'] * 30 * gb.difficulty
         for i in range(1, self.length, 2):
             for j in range(1, self.length, 2):
                 if self.maze[i][j] == '.':
@@ -78,6 +83,8 @@ class Maze:
                     case "M": 
                         gb.entity_stack.append(Enemy(i, j, randint(1, 5)))
                         self.maze[i][j] = '.'
-
+                    case "A": 
+                        gb.entity_stack.append(Ally(i, j, randint(1, 5)))
+                        self.maze[i][j] = '.'
     def __str__(self) -> str:
         return '\n'.join([''.join(line) for line in self.maze])

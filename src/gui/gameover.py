@@ -5,7 +5,7 @@ from src.constants import *
 
 class Gameover:
     def __init__(self) -> None:
-        self.new_game_button = Button(gb.screen.width/2 - 64*2, gb.screen.height/2 - 21*2, text='New Game', event='new game')
+        self.new_game_button = Button(gb.screen.width/2 - 64*2, gb.screen.height/2 - 21*2, text='New Game', event='new_game')
         self.exit_button = Button(gb.screen.width/2 - 64*2, gb.screen.height/2 - 21*2 + 100, text='  Exit', event='close')
 
     def get_total_score(self):

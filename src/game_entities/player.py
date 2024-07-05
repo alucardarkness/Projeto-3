@@ -12,6 +12,7 @@ class Player:
         self.hp = hp
         self.points = points
         self.time = time
+        self.last_death = None
 
     def respawn(self, x:float = 1.5, y:float = 1.5, speed:float = 0.1, hp:int = 4, time:int = 60):
         self.x = x
@@ -38,6 +39,7 @@ class Player:
             
     def hit(self):
         self.hp -= 1
+        self.last_death = (self.x, self.y)
         self.x = 1.5
         self.y = 1.5
         if self.hp == 0:

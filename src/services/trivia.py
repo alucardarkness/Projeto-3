@@ -4,13 +4,13 @@ from pygame import draw, Rect
 from src.constants import *
 
 class Trivia:
-    def __init__(self, enemy) -> None:
+    def __init__(self, enemy, is_passivel:bool=False) -> None:
         self.enemy = enemy
         self.id = self.enemy.question
         self.title = self.get_title(self.id)
         self.answers = self.get_answers(self.id)
         self.correct = self.get_correct(self.id)
-        
+        self.is_passivel = is_passivel
     def get_title(self, trivia_id):
         match trivia_id:
             case 0: return "Hello World?"
@@ -46,8 +46,13 @@ class Trivia:
             case 5: return 2
     
     def submit(self, answer):
+        gb.on_trivia = False
         if answer == self.correct:
             gb.entity_stack.remove(self.enemy)
+            if self.is_passivel:
+                if gb.player.hp < 5: gb.player.hp += 1
         else:
-            gb.player.hit()
-        gb.on_trivia = False
+            if not self.is_passivel: 
+                gb.player.hit()
+            else:
+                gb.entity_stack.remove(self.enemy)

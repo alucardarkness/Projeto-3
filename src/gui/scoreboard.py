@@ -16,3 +16,4 @@ class Scoreboard:
             count += 1
             score_text = gb.font16.render(f"{count}. {player.ljust(40)} {score.rjust(10)}", True, BLACK)
             gb.screen.surface.blit(score_text, (gb.screen.width/2 - 150, gb.screen.height/2 - 200 + 20 * count))  
+            if count == 20: break

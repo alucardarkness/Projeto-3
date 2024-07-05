@@ -6,7 +6,7 @@ import csv
 from src.constants import *
 from datetime import date
 import pickle
-
+from src.services.random_maze_gen import Maze
 pygame.init()  
 gb.init()
 clock = pygame.time.Clock()
@@ -33,7 +33,7 @@ while True:
             # if any key is pressed  
             if event.type == pygame.KEYDOWN:  
                 # prints on the console the key pressed  
-                print(u'"{}" key pressed'.format(key_name))  
+                #print(u'"{}" key pressed'.format(key_name))  
                 gb.key_dict[key_name] = True
                 if key_name == 'ESCAPE' and gb.state == 'game':
                     gb.is_paused = not gb.is_paused
@@ -47,6 +47,7 @@ while True:
             gb.player.time -= 1
             gb.cron += 1
             if gb.player.time == 0:
+                gb.player.hit()
                 gb.event = 'gameover'
         if event.type == pygame.QUIT:  
             pygame.quit()  
@@ -54,7 +55,7 @@ while True:
             quit()  
     
     def set_phase():
-        gb.maze = gb.maze_list[gb.level-1]
+        gb.maze = Maze(gb.level)
         gb.entity_stack = [gb.player]
         gb.maze.set_maze_entities()
         gb.player.respawn()
@@ -69,12 +70,14 @@ while True:
                 gb.state = 'hub'
                 # Saving the objects:
                 with open(SAVE_FILE, 'wb') as f:  # Python 3: open(..., 'wb')
-                    pickle.dump([gb.maze, gb.maze_list, gb.player, gb.entity_stack, gb.level, gb.cron], f)
+                    pickle.dump([gb.maze, gb.player, gb.entity_stack, gb.level, gb.cron], f)
+                    f.close()
             case "load_game":
                 # Getting back the objects:
                 with open(SAVE_FILE, 'rb') as f:  # Python 3: open(..., 'rb')
-                    gb.maze, gb.maze_list, gb.player, gb.entity_stack, gb.level, gb.cron = pickle.load(f)
-                    gb.state = 'game'
+                    gb.maze, gb.player, gb.entity_stack, gb.level, gb.cron = pickle.load(f)
+                    f.close()
+                gb.state = 'game'
             case "restart":
                 gb.is_paused = False
                 set_phase()
@@ -93,9 +96,19 @@ while True:
 
             case "gameover":
                 gb.state = "gameover"
+                with open(f"src/scenes/maps/maze_{gb.level}") as f:
+                    content = f.read().splitlines()
+                    maze = [[c for c in line] for line in content[1:]]
+                    maze[int(gb.player.last_death[0])][int(gb.player.last_death[1])] = 'A'
+                    with open(f"storage/maze_{gb.level}", 'w') as w:
+                        w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in maze]))
+                        w.close()
+                    f.close()
+
                 with open(SCORE_FILE, 'a', newline='') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(['aluno', int(100 *gb.level * gb.player.points / gb.cron)])
+                    csvfile.close()
         gb.event = None
     match gb.state:
         case "hub":
