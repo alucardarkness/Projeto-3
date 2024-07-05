@@ -47,8 +47,8 @@ while True:
             gb.player.time -= 1
             gb.cron += 1
             if gb.player.time == 0:
-                gb.player.hit()
                 gb.event = 'gameover'
+                gb.player.hit()
         if event.type == pygame.QUIT:  
             pygame.quit()  
             # quit the program.   
@@ -86,6 +86,8 @@ while True:
                 quit()
             case "ranking":
                 gb.state = 'scoreboard'
+            case "info": 
+                gb.state = 'about'
             case "new_game":
                 gb.state = 'game'
                 gb.level = 1
@@ -96,34 +98,31 @@ while True:
 
             case "gameover":
                 gb.state = "gameover"
-                with open(f"src/scenes/maps/maze_{gb.level}") as f:
-                    content = f.read().splitlines()
-                    maze = [[c for c in line] for line in content[1:]]
-                    maze[int(gb.player.last_death[0])][int(gb.player.last_death[1])] = 'A'
-                    with open(f"storage/maze_{gb.level}", 'w') as w:
-                        w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in maze]))
-                        w.close()
-                    f.close()
-
                 with open(SCORE_FILE, 'a', newline='') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(['aluno', int(100 *gb.level * gb.player.points / gb.cron)])
                     csvfile.close()
+                    
+                maze = None
+                with open(f"storage/mazes/maze_{gb.level}") as f:
+                    content = f.read().splitlines()
+                    maze = [[c for c in line] for line in content[1:]]
+                    if maze[gb.player.last_death[0]][gb.player.last_death[1]] not in ('E', 'S', '#'): 
+                        maze[gb.player.last_death[0]][gb.player.last_death[1]] = 'A'
+                with open(f"storage/mazes/maze_{gb.level}", 'w') as w:
+                    w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in maze]))
+                    w.close()
         gb.event = None
     match gb.state:
-        case "hub":
-            pass
-        case "scoreboard":
-            pass
-        case "gameover":
-            pass
         case "game":
-            render_maze.draw_maze()
             for entity in gb.entity_stack:
                 if not gb.is_paused and not gb.on_trivia:
                     entity.update()
+            render_maze.draw_maze()
+            for entity in gb.entity_stack:
                 # Draws the surface object to the screen.   
                 entity.draw()
+            render_maze.draw_maze_pos()
     interface.draw()
     pygame.display.update()   
     clock.tick(60)

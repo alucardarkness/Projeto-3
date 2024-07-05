@@ -12,8 +12,8 @@ class TriviaUi:
 
     def draw(self):
         gb.screen.surface.blit(gb.asset['book'], (gb.screen.width/2 - 146 * 1.5, gb.screen.height/2 - 180 * 1.5))  
-        trivia_text = gb.font16.render(gb.trivia.title, True, BLACK)
-        gb.screen.surface.blit(trivia_text, (gb.screen.width/2 - 150, gb.screen.height/2 - 21*2 - 100))  
+        trivia_text = [gb.font16.render(line, True, BLACK) for line in gb.trivia.title]
+        for num, line in enumerate(trivia_text): gb.screen.surface.blit(line, (gb.screen.width/2 - 150, gb.screen.height/2 - 21*2 - 100 + 20*num))  
         self.button1.draw()
         self.button2.draw()
         self.button3.draw()

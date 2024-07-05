@@ -8,6 +8,7 @@ from src.gui.pause import Pause
 from src.gui.scoreboard import Scoreboard
 from src.gui.trivia_ui import TriviaUi
 from src.gui.gameover import Gameover
+from src.gui.about import About
 
 class Interface:
     def __init__(self) -> None:
@@ -17,7 +18,8 @@ class Interface:
         self.scoreboard = Scoreboard()
         self.trivia_ui = TriviaUi()
         self.gameover = Gameover()
-
+        self.about = About()
+        
     def draw(self):
         match gb.state:
             case "hub": self.hub.draw()
@@ -31,3 +33,5 @@ class Interface:
                 self.scoreboard.draw()
             case "gameover":
                 self.gameover.draw()
+            case "about":
+                self.about.draw()

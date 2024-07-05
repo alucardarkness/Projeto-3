@@ -1,4 +1,4 @@
-from pygame import draw
+from pygame import time
 import src.globals as gb
 from src.constants import *
 
@@ -16,7 +16,7 @@ class StableBomb:
             gb.entity_stack.remove(self)
     
     def draw(self):
-
+        current_sprite = (time.get_ticks() % 1500) // 750
         gb.screen.surface.blit(gb.asset['bomb'], 
                                 ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
-                                 (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))
+                                 (((self.y - gb.player.y) * 16 - 10 + 2 * current_sprite) * gb.screen.resolution + gb.screen.width/2)))

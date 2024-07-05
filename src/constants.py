@@ -20,3 +20,4 @@ MAROON = Color("maroon")
 TURQUOISE = Color("turquoise")
 SCORE_FILE = 'storage/score.csv'
 SAVE_FILE = 'storage/saves/save.pkl'
+ABOUT = ['Projeto 3 - MC102 2024', 'Creditos:', 'Andre Yuhji Terada - 186325', 'Michael Andrews Moraes - 274477', 'BlockPixel ResourcePack']

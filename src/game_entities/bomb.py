@@ -14,6 +14,8 @@ class Bomb:
         self.fuse_time -= 1
         if self.fuse_time == 0:
             self.explodir(int(self.x), int(self.y))
+        if self.fuse_time <= -35:
+            gb.entity_stack.remove(self)
             
     def explodir(self, x, y):
         print('Explodiu', x, y)
@@ -34,3 +36,7 @@ class Bomb:
                 gb.screen.surface.blit(gb.asset['bomb_tick'], 
                                     ((((self.x - gb.player.x) * 16 - 8) * gb.screen.resolution + gb.screen.width/2), 
                                     (((self.y - gb.player.y) * 16 - 8) * gb.screen.resolution + gb.screen.width/2)))
+        if self.fuse_time < 0:
+            gb.screen.surface.blit(gb.asset['explosion'][abs(self.fuse_time)], 
+                                    ((((self.x - gb.player.x) * 16 - 25) * gb.screen.resolution + gb.screen.width/2), 
+                                    (((self.y - gb.player.y) * 16 - 25) * gb.screen.resolution + gb.screen.width/2)))

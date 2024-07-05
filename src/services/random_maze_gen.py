@@ -20,19 +20,20 @@ class Maze:
         self.length = level * 16 + 1
         self.maze = [['#' for _ in range(self.length)] for _ in range(self.length)]
 
-        with open(f"src/scenes/maps/maze_{level}") as f:
+        content = None
+        with open(f"storage/mazes/maze_{level}") as f:
             content = f.read().splitlines()
-            print(content[0], str(date.today()))
-            if content[0] < str(date.today()): 
-                self.make_path(self.maze, 1, 1, self.length)
-                self.place_itens()
-                self.maze[1][1], self.maze[self.length - 2][self.length - 2] = 'E', 'S'
-                with open(f"storage/maze_{level}", 'w') as w:
-                    w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in self.maze]))
-                    w.close()
-            else:
-                self.maze = [[c for c in line] for line in content[1:]]
             f.close()
+        if content[0] < str(date.today()): 
+            self.make_path(self.maze, 1, 1, self.length)
+            self.place_itens()
+            self.maze[1][1], self.maze[self.length - 2][self.length - 2] = 'E', 'S'
+            with open(f"storage/mazes/maze_{level}", 'w') as w:
+                w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in self.maze]))
+                w.close()
+        else:
+            self.maze = [[c for c in line] for line in content[1:]]
+            
     def make_path(self, maze, x, y, l):
         maze[y][x] = '.'
         ord = [0,1,2,3]
@@ -57,16 +58,22 @@ class Maze:
                         self.make_path(maze, x-2, y, l)
     
     def place_itens(self):
-        item_list = ["H", "T", "C", "C", "B", "A"] + ['M'] * gb.difficulty + ['.'] * 30 * gb.difficulty
+        statues_count = 3
+        item_list = ["H", "T", "C", "C", "B", "A"] + ['M'] * 2 * gb.difficulty + ['.'] * 30 * gb.difficulty
         for i in range(1, self.length, 2):
             for j in range(1, self.length, 2):
                 if self.maze[i][j] == '.':
-                    self.maze[i][j] = item_list[randint(0, len(item_list)-1)]
+                    random_item = item_list[randint(0, len(item_list)-1)]
+                    if random_item == 'A':
+                        statues_count -= 1
+                        if statues_count < 0: random_item = '.'
+                    self.maze[i][j] = random_item
 
 
     def set_maze_entities(self): 
-        for i in range(1, self.length, 2):
-            for j in range(1, self.length, 2):
+        statues_count = 3
+        for i in range(1, self.length-1):
+            for j in range(1, self.length-1):
                 match self.maze[i][j]:
                     case "H": 
                         gb.entity_stack.append(Heart(i, j))
@@ -84,7 +91,9 @@ class Maze:
                         gb.entity_stack.append(Enemy(i, j, randint(1, 5)))
                         self.maze[i][j] = '.'
                     case "A": 
-                        gb.entity_stack.append(Ally(i, j, randint(1, 5)))
+                        statues_count -= 1
+                        if statues_count >= 0:
+                            gb.entity_stack.append(Ally(i, j, randint(1, 5)))
                         self.maze[i][j] = '.'
     def __str__(self) -> str:
         return '\n'.join([''.join(line) for line in self.maze])

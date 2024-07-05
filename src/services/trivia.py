@@ -13,12 +13,12 @@ class Trivia:
         self.is_passivel = is_passivel
     def get_title(self, trivia_id):
         match trivia_id:
-            case 0: return "Hello World?"
-            case 1: return "Integrais tambem sao conhecidas por:"
-            case 2: return "Qual o tipo de data structure denotado por {}?"
-            case 3: return "Qual a cor do cavalo branco de napoleao?"
-            case 4: return "Qual o nome do minotauro que enfrentou Teseus?"
-            case 5: return "Qual foi o tema do projeto 2?"
+            case 0: return ["Hello World?"]
+            case 1: return ["Integrais tambem sao conhecidas por:"]
+            case 2: return ["Qual o tipo de data structure", "denotado por {}?"]
+            case 3: return ["Qual a cor do cavalo branco", "de napoleao?"]
+            case 4: return ["Qual o nome do minotauro que", "enfrentou Teseus?"]
+            case 5: return ["Qual foi o tema do projeto 2?"]
 
             
     
@@ -27,7 +27,7 @@ class Trivia:
             case 0:
                 return ("True True", "True False", "False True", "False False")
             case 1:
-                return ("antiderivada", "soma infinitesimal", "funçao da area", "aproximaçao linear")
+                return ("antiderivada", "soma infinitesimal", "funcao da area", "aproximacao linear")
             case 2:
                 return ("tupla", "soma lista", "dicionario", "string")
             case 3:
@@ -48,11 +48,10 @@ class Trivia:
     def submit(self, answer):
         gb.on_trivia = False
         if answer == self.correct:
-            gb.entity_stack.remove(self.enemy)
-            if self.is_passivel:
-                if gb.player.hp < 5: gb.player.hp += 1
+            self.enemy.hit()
+            gb.player.points += 5
         else:
             if not self.is_passivel: 
                 gb.player.hit()
             else:
-                gb.entity_stack.remove(self.enemy)
+                self.enemy.hit()
