@@ -55,12 +55,17 @@ while True:
         print(gb.event)
         match gb.event:
             case "escape": gb.is_paused = False                 #Esc
-            case "ranking": gb.state = 'scoreboard'             #Botão para ir para o ranking
             case "info": gb.state = 'about'                     #Botão para ir para o about
             case "exit":                                        #Botão sair
                 pygame.quit()  
                 quit()
 
+            #vai para a tela de ranking e carrega o arquivo de scoreboard
+            case "ranking": 
+                gb.state = 'scoreboard'             #Botão para ir para o ranking
+                with open(SCORE_FILE) as file:
+                    gb.scoreboard = list(csv.reader(file, delimiter=','))[1:]
+                    
             #Começa um novo jogo
             case "new_game":
                 gb.state = 'game'
@@ -76,12 +81,13 @@ while True:
             #Sai da fase e salva ela
             case "close": 
                 gb.is_paused = False
+                if gb.state == "game":
+                    #Grava as variaveis de fase em um arquivo pkl
+                    with open(SAVE_FILE, 'wb') as f: 
+                        pickle.dump([gb.maze, gb.player, gb.entity_stack, gb.level, gb.cron], f)
+                        f.close()
                 gb.state = 'hub'
-                #Grava as variaveis de fase em um arquivo pkl
-                with open(SAVE_FILE, 'wb') as f: 
-                    pickle.dump([gb.maze, gb.player, gb.entity_stack, gb.level, gb.cron], f)
-                    f.close()
-                    
+
             #Carrega a fase a partir de um arquivo pkl
             case "load_game":
                 with open(SAVE_FILE, 'rb') as f: 
