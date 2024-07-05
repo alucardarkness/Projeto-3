@@ -7,6 +7,9 @@ class Coin:
         self.x = x + 0.5
         self.y = y + 0.5
     
+    def hit(self):
+        gb.entity_stack.remove(self)
+
     def update(self):
         if abs(gb.player.x - self.x) < 0.5 and abs(gb.player.y - self.y) < 0.5:
             gb.player.points += 1

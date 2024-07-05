@@ -18,3 +18,4 @@ BROWN = Color("brown4")
 BROWN_RED = Color("brown")
 MAROON = Color("maroon")
 TURQUOISE = Color("turquoise")
+SCORE_FILE = 'storage/score.csv'

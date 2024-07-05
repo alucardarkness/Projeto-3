@@ -1,10 +1,9 @@
 from pygame import draw, Rect
 import src.globals as gb
-
-white = (255, 255, 255)  
+from src.constants import *
 
 def draw_maze():
-    gb.screen.surface.fill(white)  
+    gb.screen.surface.fill(WHITE)  
     int_x = int(gb.player.x)
     int_y = int(gb.player.y)
     for x in range((int_x - 15) if int_x > 15 else 0, (int_x + 15) if int_x + 15 < gb.maze.length else gb.maze.length):

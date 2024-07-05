@@ -7,6 +7,9 @@ class Bomb:
         self.y = y
         self.fuse_time = fuse_time
     
+    def hit(self):
+        self.fuse_time = 0
+
     def update(self):
         self.fuse_time -= 1
         if self.fuse_time == 0:
@@ -16,9 +19,10 @@ class Bomb:
         print('Explodiu', x, y)
         for i in range(x-1 if x > 1 else x, (x+2) if x+2 < gb.maze.length -1 else x+1):
             for j in range(y-1 if y > 1 else y, y+2 if y+2 < gb.maze.length-1 else y+1):
-                gb.maze.maze[i][j] = '.'
-        if abs(gb.player.x - self.x) < 2.5 and abs(gb.player.y - self.y) < 2.5:
-            gb.player.hit()
+                if gb.maze.maze[i][j] == '#': gb.maze.maze[i][j] = '.'
+        for entity in gb.entity_stack:
+            if abs(entity.x - self.x) < 2.5 and abs(entity.y - self.y) < 2.5:
+                entity.hit()
     def draw(self):
         if self.fuse_time > 0:
             gb.screen.surface.blit(gb.asset['bomb'], 

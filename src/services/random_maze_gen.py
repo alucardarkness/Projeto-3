@@ -3,17 +3,31 @@ import src.globals as gb
 from src.game_entities.heart import Heart
 from src.game_entities.clock import Clock
 from src.game_entities.coin import Coin
+from src.game_entities.stable_bomb import StableBomb
 from src.game_entities.enemy import Enemy
+from datetime import date
+from src.constants import *
 
 class Maze:
-    def __init__(self, size: int = 10):
+    def __init__(self, level:int, size: int = 10):
         if size > 30: size = 30
         if size < 5: size = 5
+        if level > 5: level = 5
+        if level < 1: level = 1
+        self.level = level
         self.length = size * 2 + 1
         self.maze = [['#' for _ in range(self.length)] for _ in range(self.length)]
-        self.make_path(self.maze, 1, 1, self.length)
-        self.maze[1][1], self.maze[self.length - 2][self.length - 2] = 'E', 'S'
 
+        with open(f"storage/maze_{level}") as f:
+            content = f.read().splitlines()
+            if content[0] < str(date.today()): 
+                self.make_path(self.maze, 1, 1, self.length)
+                self.place_itens()
+                self.maze[1][1], self.maze[self.length - 2][self.length - 2] = 'E', 'S'
+                with open(f"storage/maze_{level}", 'w') as w:
+                    w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in self.maze]))
+            else:
+                self.maze = [[c for c in line] for line in content[1:]]
     def make_path(self, maze, x, y, l):
         maze[y][x] = '.'
         ord = [0,1,2,3]
@@ -37,17 +51,33 @@ class Maze:
                         maze[y][x-1] = '.'
                         self.make_path(maze, x-2, y, l)
     
-
-    def get_maze_entities(self): 
-        item_list = ["H", "T", "C", "C", "E"] + ['.'] * 20
+    def place_itens(self):
+        item_list = ["H", "T", "C", "B", "M"] + ['.'] * 20
         for i in range(1, self.length, 2):
             for j in range(1, self.length, 2):
                 if self.maze[i][j] == '.':
-                    match item_list[randint(0, len(item_list)-1)]:
-                        case "H": gb.entity_stack.append(Heart(i, j))
-                        case "T": gb.entity_stack.append(Clock(i, j))
-                        case "C": gb.entity_stack.append(Coin(i, j))
-                        case "E": gb.entity_stack.append(Enemy(i, j, "Hello World?"))
+                    self.maze[i][j] = item_list[randint(0, len(item_list)-1)]
+
+
+    def set_maze_entities(self): 
+        for i in range(1, self.length, 2):
+            for j in range(1, self.length, 2):
+                match self.maze[i][j]:
+                    case "H": 
+                        gb.entity_stack.append(Heart(i, j))
+                        self.maze[i][j] = '.'
+                    case "T": 
+                        gb.entity_stack.append(Clock(i, j))
+                        self.maze[i][j] = '.'
+                    case "C": 
+                        gb.entity_stack.append(Coin(i, j))
+                        self.maze[i][j] = '.'
+                    case "B": 
+                        gb.entity_stack.append(StableBomb(i, j))
+                        self.maze[i][j] = '.'
+                    case "M": 
+                        gb.entity_stack.append(Enemy(i, j, "Hello World?"))
+                        self.maze[i][j] = '.'
 
     def __str__(self) -> str:
         return '\n'.join([''.join(line) for line in self.maze])

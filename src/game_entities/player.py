@@ -12,9 +12,19 @@ class Player:
         self.hp = hp
         self.points = points
         self.time = time
-    
+
+    def respawn(self, x:float = 1.5, y:float = 1.5, speed:float = 0.1, hp:int = 4, time:int = 60):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.item = "bomb"
+        self.hp = hp
+        self.time = time
+
     def update(self):
         if gb.key_dict['Q']: self.use_item()
+        if gb.maze.maze[int(self.x)][int(self.y)] == 'S':
+            gb.event = 'phase_complete'
         self.move()
         
     def use_item(self):
@@ -27,6 +37,8 @@ class Player:
         self.hp -= 1
         self.x = 1.5
         self.y = 1.5
+        if self.hp == 0:
+            gb.event = 'gameover'
         
     def move(self):
         vector2 = [0, 0]

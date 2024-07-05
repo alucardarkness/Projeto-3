@@ -1,17 +1,25 @@
 import src.globals as gb
+from src.gui.button import Button
 from pygame import draw, Rect
 from src.constants import *
+from src.gui.game_ui import GameUi
+from src.gui.hub import Hub
+from src.gui.pause import Pause
+from src.gui.scoreboard import Scoreboard
 
 class Interface:
     def __init__(self) -> None:
-        pass
-
+        self.hub = Hub()
+        self.pause = Pause()
+        self.game_ui = GameUi()
+        self.scoreboard = Scoreboard()
     def draw(self):
-        draw.rect(gb.screen.surface, (255,0,0), Rect(10, 10, 32 * gb.player.hp, 32))    
-        # Level indication
-        level_text = gb.font.render(f"level {gb.level}", True, BLACK)
-        clock_text = gb.font.render(str(gb.player.time).rjust(3) if gb.player.time > 0 else 'game_over!', True, BLACK)
-        score_text = gb.font.render("Score: " + str(gb.player.points).rjust(3), True, BLACK)
-        gb.screen.surface.blit(level_text, (gb.screen.width - 100, 10))  
-        gb.screen.surface.blit(clock_text, (gb.screen.width/2 - 100, 10))  
-        gb.screen.surface.blit(score_text, (10, 50))  
+        match gb.state:
+            case "hub": self.hub.draw()
+            case "game": 
+                self.game_ui.draw()
+                if gb.is_paused:
+                    self.pause.draw()
+            case "scoreboard":
+                self.scoreboard.draw()
+                
