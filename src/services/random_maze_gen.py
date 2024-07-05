@@ -52,7 +52,7 @@ class Maze:
                         self.make_path(maze, x-2, y, l)
     
     def place_itens(self):
-        item_list = ["H", "T", "C", "B", "M"] + ['.'] * 20
+        item_list = ["H", "T", "C", "B"] + ['M'] * gb.difficulty + ['.'] * 20 * gb.difficulty
         for i in range(1, self.length, 2):
             for j in range(1, self.length, 2):
                 if self.maze[i][j] == '.':
@@ -76,7 +76,7 @@ class Maze:
                         gb.entity_stack.append(StableBomb(i, j))
                         self.maze[i][j] = '.'
                     case "M": 
-                        gb.entity_stack.append(Enemy(i, j, "Hello World?"))
+                        gb.entity_stack.append(Enemy(i, j, randint(1, 5)))
                         self.maze[i][j] = '.'
 
     def __str__(self) -> str:

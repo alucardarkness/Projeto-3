@@ -14,12 +14,16 @@ def init():
     global entity_stack
     global screen
     global font
+    global font16
     global level
     global asset
     global is_paused
     global state
     global event
     global scoreboard
+    global on_trivia
+    global trivia
+    global cron
     
     with open(SCORE_FILE) as file:
         scoreboard = csv.reader(file, delimiter=',')
@@ -27,12 +31,16 @@ def init():
     is_paused = False
     state = "hub"
     level = 0
+    cron = 0
     maze = None
+    on_trivia = None
+    trivia = None
     player = Player()
     screen = Screen(resolution=5)
     entity_stack = None
     key_dict = {'A':False, 'D':False, 'W':False, 'S':False, 'Q':False}
     font = pygame.font.Font("fonts/font.ttf", 32)
+    font16 = pygame.font.Font("fonts/font.ttf", 16)
     event = None
     asset = {
         "wall": pygame.transform.scale_by(pygame.image.load("assets/textures/wall.png"), screen.resolution),
@@ -52,7 +60,6 @@ def init():
         "button_hover": pygame.transform.scale_by(pygame.image.load("assets/textures/button_hover.png"), 4),
         "hub": pygame.image.load("assets/textures/hub.png"),
         "back_button": pygame.transform.scale_by(pygame.image.load("assets/textures/back_button.png"), 3),
-        "back_button_hover": pygame.transform.scale_by(pygame.image.load("assets/textures/back_button_hover.png"), 3)
-
+        "trivia_button": pygame.transform.scale_by(pygame.image.load("assets/textures/button.png"), 3)
     }
     

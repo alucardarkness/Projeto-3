@@ -2,6 +2,8 @@ import src.globals as gb
 from src.services.maze_path_tracker import PathTracker
 from pygame import draw
 from src.constants import *
+from src.services.trivia import Trivia
+
 class Enemy():
     def __init__(self, x:float, y:float, question:str, speed:float=0.02) -> None:
         self.x = x
@@ -37,7 +39,8 @@ class Enemy():
         self.y += vector2[1] * self.speed
         
         if abs(gb.player.x - self.x) < 0.5 and abs(gb.player.y - self.y) < 0.5:
-            gb.player.hit()
+            gb.on_trivia = True
+            gb.trivia = Trivia(self)
 
         if (((int(self.x) == int(gb.player.x) and self.y - gb.player.y < 5 and self.y - gb.player.y > 0 and vector2 == [0, -1]) or
             (int(self.x) == int(gb.player.x) and gb.player.y - self.y < 5 and gb.player.y - self.y > 0 and vector2 == [0, 1]) or

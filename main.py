@@ -42,6 +42,7 @@ while True:
                 gb.key_dict[key_name] = False
         if event.type == pygame.USEREVENT and gb.state == "game" and not gb.is_paused: 
             gb.player.time -= 1
+            gb.cron += 1
             if gb.player.time == 0:
                 gb.event = 'gameover'
         if event.type == pygame.QUIT:  
@@ -80,17 +81,21 @@ while True:
                     gb.level += 1
                     set_phase()
                 else:
-                    print("win game")
+                    gb.state == "gameover"
+            case "gameover":
+                gb.state = "gameover"
         gb.event = None
     match gb.state:
         case "hub":
             pass
         case "scoreboard":
             pass
+        case "gameover":
+            pass
         case "game":
             render_maze.draw_maze()
             for entity in gb.entity_stack:
-                if not gb.is_paused:
+                if not gb.is_paused and not gb.on_trivia:
                     entity.update()
                 # Draws the surface object to the screen.   
                 entity.draw()
