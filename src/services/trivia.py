@@ -19,7 +19,7 @@ class Trivia:
             case 3: return ["Qual a cor do cavalo branco", "de napoleao?"]
             case 4: return ["Qual o nome do minotauro que", "enfrentou Teseus?"]
             case 5: return ["Qual foi o tema do projeto 2?"]
-            case 6: return ["Qual das séries a seguir possui", "o maior numero de episódios?"]
+            case 6: return ["Qual das series a seguir possui", "o maior numero de episodios?"]
 
             
     

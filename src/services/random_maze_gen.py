@@ -88,12 +88,12 @@ class Maze:
                         gb.entity_stack.append(StableBomb(i, j))
                         self.maze[i][j] = '.'
                     case "M": 
-                        gb.entity_stack.append(Enemy(i, j, randint(1, 5)))
+                        gb.entity_stack.append(Enemy(i, j, randint(1, 6)))
                         self.maze[i][j] = '.'
                     case "A": 
                         statues_count -= 1
                         if statues_count >= 0:
-                            gb.entity_stack.append(Ally(i, j, randint(1, 5)))
+                            gb.entity_stack.append(Ally(i, j, randint(1, 6)))
                         self.maze[i][j] = '.'
     def __str__(self) -> str:
         return '\n'.join([''.join(line) for line in self.maze])

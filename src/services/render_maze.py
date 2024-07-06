@@ -9,11 +9,7 @@ def draw_maze():
         for y in range((int_y - 15) if int_y > 15 else 0, (int_y + 15) if int_y + 15 < gb.maze.length else gb.maze.length):
             match gb.maze.maze[x][y]:
                 case "#": 
-                    if y+1 < gb.maze.length and gb.maze.maze[x][y+1] == '#':
-                        gb.screen.surface.blit(gb.asset['wall'], 
-                                            (((x - gb.player.x) * 16 * gb.screen.resolution + gb.screen.width/2), 
-                                                ((y - gb.player.y) * 16 * gb.screen.resolution + gb.screen.width/2)))
-                    else:
+                    if not (y+1 < gb.maze.length and gb.maze.maze[x][y+1] == '#'):
                         gb.screen.surface.blit(gb.asset['wall_side'], 
                                             (((x - gb.player.x) * 16 * gb.screen.resolution + gb.screen.width/2), 
                                                 ((y - gb.player.y) * 16 * gb.screen.resolution + gb.screen.width/2)))    
