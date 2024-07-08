@@ -1,23 +1,28 @@
 import src.globals as gb
 from src.utils.constants import *
-import pygame
+from pygame import Surface, mouse, Rect
+from src.utils.resources import assets
+
 class BackButton:
-    def __init__(self, x, y, width:int = 23 * 3, height:int = 19 * 3, text:str = "Button", event:str = "") -> None:
+    def __init__(self, x, y, event:str = "") -> None:
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self.asset = assets['back_button']
+        self.width = self.asset.get_width()
+        self.height = self.asset.get_height()
         self.event = event
         self.pressed = False
 
     def is_hover(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        if mouse_x > self.x and mouse_x < self.x + self.width and mouse_y > self.y and mouse_y < self.y + self.height:
-            return True
-        return False
-    def draw(self):
-        gb.screen.surface.blit(gb.asset['back_button_hover'], (self.x, self.y)) if self.is_hover() else gb.screen.surface.blit(gb.asset['back_button'], (self.x, self.y))
-        if self.is_hover() and pygame.mouse.get_pressed()[0]:
+        #Verifica se o cursor do mouse está dentro do retangulo do botao
+        rect = Rect(self.x, self.y, self.width, self.height)
+        return rect.collidepoint(mouse.get_pos())
+    
+    def draw(self, screen):
+        #Se o mouse estiver sobre o botao, ele troca o sprite para hover
+        screen.surface.blit(assets['back_button_hover'], (self.x, self.y)) if self.is_hover() else screen.surface.blit(assets['back_button'], (self.x, self.y))
+        #Quando ele soltar o click do mouse, o evento disparará
+        if self.is_hover() and mouse.get_pressed()[0]:
             self.pressed = True
         else:
             if self.pressed == True:

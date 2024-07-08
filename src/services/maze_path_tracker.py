@@ -7,11 +7,12 @@ class PathTracker:
         self.x = x
         self.y = y
         self.path = []
-        self._maze = deepcopy(gb.maze.maze)
+        self._maze = deepcopy(gb.maze.maze) #Utiliza uma copia do labirinto 
         self._maze_length = gb.maze.length
         self.path_tracker(x, y)
         
     def path_tracker(self, x:int, y:int):
+        #Algoritmo de resolucao de labirinto com lista de passos, porém neste caso não há solucao. Então ele andará aleatoriamente até completar 300 passos
         if len(self.path) > 300: 
             return 
         self._maze[x][y] = 'o'

@@ -1,25 +1,30 @@
 import src.globals as gb
 from src.utils.constants import *
-import pygame
+from src.utils.resources import *
+
+from pygame import Surface, mouse, Rect
 class TriviaButton:
-    def __init__(self, x, y, width:int = 64*3, height:int = 21*3, num:int = 0) -> None:
+    def __init__(self, x, y, num:int = 0) -> None:
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self.asset = assets['trivia_button']
+        self.width = self.asset.get_width()
+        self.height = self.asset.get_height()
         self.num = num
         self.pressed = False
 
     def is_hover(self):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        if mouse_x > self.x and mouse_x < self.x + self.width and mouse_y > self.y and mouse_y < self.y + self.height:
-            return True
-        return False
-    def draw(self):
-        gb.screen.surface.blit(gb.asset['trivia_button'], (self.x, self.y))
-        button_text = gb.font16.render(str(gb.trivia.answers[self.num-1]), True, WHITE if self.is_hover() else BLACK)
-        gb.screen.surface.blit(button_text, (self.x + 20, self.y+25))  
-        if self.is_hover() and pygame.mouse.get_pressed()[0]:
+        #Verifica se o mouse esta em cima do botao
+        rect = Rect(self.x, self.y, self.width, self.height)
+        return rect.collidepoint(mouse.get_pos())
+    
+    def draw(self, screen):
+        #Altera a cor da letra quando o mouse está em cima
+        screen.surface.blit(self.asset, (self.x, self.y))
+        button_text = fonts['16'].render(str(gb.trivia.answers[self.num-1]), True, WHITE if self.is_hover() else BLACK)
+        screen.surface.blit(button_text, (self.x + 20, self.y+25))  
+        #Dispara o evento quando solta o click do mouse
+        if self.is_hover() and mouse.get_pressed()[0]:
             self.pressed = True
         else:
             if self.pressed == True:

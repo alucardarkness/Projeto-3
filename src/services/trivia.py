@@ -1,61 +1,36 @@
 import src.globals as gb
-from src.gui.button import Button
-from pygame import draw, Rect
 from src.utils.constants import *
+from src.game_entities.heart import Heart
+from src.game_entities.clock import Clock
+from src.game_entities.coin import Coin
+from src.game_entities.stable_bomb import StableBomb
+from random import randint
 
 class Trivia:
-    def __init__(self, enemy, is_passivel:bool=False) -> None:
+    def __init__(self, enemy, is_ally:bool=False) -> None:
         self.enemy = enemy
         self.id = self.enemy.question
-        self.title = self.get_title(self.id)
-        self.answers = self.get_answers(self.id)
-        self.correct = self.get_correct(self.id)
-        self.is_passivel = is_passivel
-    def get_title(self, trivia_id):
-        match trivia_id:
-            case 0: return ["Hello World?"]
-            case 1: return ["Integrais tambem sao conhecidas por:"]
-            case 2: return ["Qual o tipo de data structure", "denotado por {}?"]
-            case 3: return ["Qual a cor do cavalo branco", "de napoleao?"]
-            case 4: return ["Qual o nome do minotauro que", "enfrentou Teseus?"]
-            case 5: return ["Qual foi o tema do projeto 2?"]
-            case 6: return ["Qual das series a seguir possui", "o maior numero de episodios?"]
-
-            
-    
-    def get_answers(self, trivia_id):
-        match trivia_id:
-            case 0:
-                return ("True True", "True False", "False True", "False False")
-            case 1:
-                return ("Antiderivada", "Soma infinitesimal", "Funcao da area", "Aproximacao linear")
-            case 2:
-                return ("Tupla", "Soma lista", "Dicionario", "String")
-            case 3:
-                return ("Vermelho", "Ele nao tinha cavalo", "Branco", "Preto")
-            case 4:
-                return ("Asterios", "Asmodeus", "Asmodeus", "Aaracokra")
-            case 5:
-                return ("Cheetos", "Domino", "Recursao", "Cores")
-            case 6:
-                return ("Power rangers", "One piece", "Doctor who", "Vila sesamo")
-    def get_correct(self, trivia_id):
-        match trivia_id:
-            case 0: return 1
-            case 1: return 1
-            case 2: return 3
-            case 3: return 3
-            case 4: return 1
-            case 5: return 2
-            case 6: return 4
+        content = '' #Carrega o arquivo de trivia de acordo com o id
+        with open(f"storage/trivias/trivia_{self.id}.txt") as f:
+            content = f.read().splitlines()
+            f.close()
+        self.title = content[0].split(';')
+        self.answers = content[1].split(';')
+        self.correct = int(content[2])
+        self.is_ally = is_ally
     
     def submit(self, answer):
-        gb.on_trivia = False
+        #Quando um dos 4 botões for apertado, ele verifica se a resposta é a correta
+        gb.on_trivia = False            
         if answer == self.correct:
-            self.enemy.hit()
-            gb.player.points += 5
+            if self.is_ally: #Se for uma trivia de aliado, ele deixa um item aleatorio no lugar
+                item_list = [Heart(self.enemy.x, self.enemy.y), Clock(self.enemy.x, self.enemy.y), StableBomb(self.enemy.x, self.enemy.y)]
+                gb.entity_stack.append(item_list[randint(0, 2)])
+            gb.player.points += 5 #Dá 5 pontos para o jogador
+            self.enemy.hit() #Destroi o inimigo/aliado que chamou a trivia
         else:
-            if not self.is_passivel: 
-                gb.player.hit()
+            #Se a resposta estive errada
+            if not self.is_ally: 
+                gb.player.hit() #Se for inimigo, da dano ao player
             else:
-                self.enemy.hit()
+                self.enemy.hit() #Se for aliado, apenas se destroi

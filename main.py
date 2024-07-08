@@ -1,4 +1,3 @@
-import src.services.render_maze as render_maze
 from src.gui.interface import Interface
 import pygame  
 import src.globals as gb 
@@ -6,14 +5,25 @@ import csv
 from src.utils.constants import *
 from datetime import date
 import pickle
-from src.services.random_maze_gen import Maze
+from src.services.maze import Maze
+from src.screen import Screen
+import src.utils.resources as rs 
+from random import randint
+
+#Inicia o pygame, as variaveis globais e as fontes e assets
 pygame.init()  
 gb.init()
+rs.init()
+
+#Instancia a tela e a Interface
+screen = Screen(resolution=4)
+interface = Interface(screen)
+
+#Configura um Clock que dispara a cada 1000 milisegundos (1s)
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 pygame.display.set_caption('Projeto 3')  
 
-interface = Interface()
 
 while True:  
     #Interpreta todos os eventos do pygame que ocorreram naquele loop
@@ -46,9 +56,12 @@ while True:
             quit()  
     
     def set_phase():
+        #Configura uma nova fase para o jogo
         gb.maze = Maze(gb.level)
         gb.entity_stack = [gb.player]
-        gb.maze.set_maze_entities()
+        gb.maze.set_maze_allies()
+        gb.maze.set_maze_items()
+        gb.maze.set_maze_enemies()
         gb.player.respawn()
 
     if gb.event:
@@ -64,7 +77,7 @@ while True:
             case "ranking": 
                 gb.state = 'scoreboard'             #Botão para ir para o ranking
                 with open(SCORE_FILE) as file:
-                    gb.scoreboard = list(csv.reader(file, delimiter=','))[1:]
+                    scoreboard = list(csv.reader(file, delimiter=','))
                     
             #Começa um novo jogo
             case "new_game":
@@ -109,31 +122,33 @@ while True:
                     writer.writerow([gb.player.name, int(100 *gb.level * gb.player.points / gb.cron)])
                     csvfile.close()
                     
-                #abre o labirinto em que o jogador perdeu, adiciona a estatua na posição e salva o labirinto
-                maze = None
-                with open(f"storage/mazes/maze_{gb.level}", 'r') as f:
-                    content = f.read().splitlines()
-                    maze = [[c for c in line] for line in content[1:]]
+                #Grava no arquivo de aliados uma nova estátua guardando o lugar onde o player morreu e ultima pergunta que foi respondida ou não. 
+                with open(STATUES_FILE) as r, open(STATUES_FILE, 'a', newline='') as w:
+                    reader = list(csv.reader(r))
+                    writer = csv.writer(w)
+                    writer.writerow([int(reader[-1][0] if len(reader) > 0 else 0)+1, gb.player.name, *gb.player.last_death, gb.level, gb.trivia.id if gb.trivia else randint(1,6)])
                     
-                with open(f"storage/mazes/maze_{gb.level}", 'w') as w:
-                    if maze[gb.player.last_death[0]][gb.player.last_death[1]] not in ('E', 'S', '#'): 
-                        maze[gb.player.last_death[0]][gb.player.last_death[1]] = 'A'
-                    w.write(str(date.today()) + '\n' + '\n'.join([''.join(line) for line in maze]))
-                    w.close()
                     
         #reseta o event
         gb.event = None
         
     #Controla a maquina de estados do jogo
-    match gb.state:
-        case "game":
-            for entity in gb.entity_stack:
-                if not gb.is_paused and not gb.on_trivia:
-                    entity.update()
-            render_maze.draw_maze()
-            for entity in gb.entity_stack:
-                entity.draw()
-            render_maze.draw_maze_pos()
-    interface.draw()
+    if gb.state == "game" and not gb.is_paused and not gb.on_trivia:
+        #Quando está no jogo, não pausado e não está em uma trivia, a cada game_tick ele atualiza todas as entidades presentes no mapa
+        for entity in gb.entity_stack:
+            entity.update()
+                
+        #Desenha as partes inferiores do labirinto
+        gb.maze.draw(screen)
+        #Desenha todas as entidades presentes na pilha
+        for entity in gb.entity_stack:
+            entity.draw(screen)
+        #Desenha as partes superiores do labirinto
+        gb.maze.draw_pos(screen)
+        
+        #Desenhar as coisas nessa ordem gera um efeito de perspectiva e profundidade, dando a impressão de que o player pode ficar atrás de uma parede do labirinto
+
+    #desenha a interface
+    interface.draw(screen)
     pygame.display.update()   
     clock.tick(60)

@@ -1,0 +1,3 @@
+Qual o tipo de data structure denotado por {}?
+Tupla;Soma lista;Dicionario;String
+3
